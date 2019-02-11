@@ -1,6 +1,5 @@
-const repoTrigger = require('./triggers/repo');
-const issueCreate = require('./creates/issue');
-const issueTrigger = require('./triggers/issue');
+const sendDataAction = require('./creates/SendData');
+const trigger = require('./triggers/webhook');
 const authentication = require('./authentication');
 
 const handleHTTPError = (response, z) => {
@@ -31,8 +30,7 @@ const App = {
 
   // If you want your trigger to show up, you better include it here!
   triggers: {
-    [repoTrigger.key]: repoTrigger,
-    [issueTrigger.key]: issueTrigger,
+    [trigger.key]: trigger,
   },
 
   // If you want your searches to show up, you better include it here!
@@ -41,7 +39,7 @@ const App = {
 
   // If you want your creates to show up, you better include it here!
   creates: {
-    [issueCreate.key]: issueCreate,
+    [sendDataAction.key]: sendDataAction,
   }
 };
 
