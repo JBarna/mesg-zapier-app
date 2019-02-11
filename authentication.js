@@ -2,15 +2,15 @@
 
 const authentication = {
   type: 'custom',
-  test: (z, bundle) => {
-    return typeof bundle.authData.endpoint === 'string' && bundle.authData.length > 0
+  test:{
+    url: "{{bundle.authData.endpoint}}/verify"
   },
   fields: [
     {
       key: 'endpoint',
       type: 'string',
       required: true,
-      helpText: 'External endpoint where your MESG application is located.'
+      helpText: 'External endpoint where your MESG application is located. Ex: https://sub.domain.com'
     },
     {
       key: 'auth',

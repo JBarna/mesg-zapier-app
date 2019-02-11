@@ -12,8 +12,12 @@ const subscribeHook = (z, bundle) => {
   // You can build requests and our client will helpfully inject all the variables
   // you need to complete. You can also register middleware to control this.
   const options = {
-    url: `${bundle.authData.endpoint}:${process.env.PORT}/api/hooks`,
+    url: `${bundle.authData.endpoint}/api/hooks`,
     method: 'POST',
+    // manually specify JSON type because zapier doesn't do it for some reason
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(data)
   };
 
@@ -30,7 +34,7 @@ const unsubscribeHook = (z, bundle) => {
   // You can build requests and our client will helpfully inject all the variables
   // you need to complete. You can also register middleware to control this.
   const options = {
-    url: `${bundle.authData.endpoint}:${process.env.PORT}/api/hooks/${hookId}`,
+    url: `${bundle.authData.endpoint}/api/hooks/${bundle.subscribeData.id}`,
     method: 'DELETE'
   };
 
@@ -42,12 +46,12 @@ const unsubscribeHook = (z, bundle) => {
 const getRecipe = (z, bundle) => {
   // bundle.cleanedRequest will include the parsed JSON object (if it's not a
   // test poll) and also a .querystring property with the URL's query string.
-  const recipe = {
-    type: bundle.cleanedRequest.type,
-    data: bundle.cleanedRequest.data
-  };
+  // const recipe = {
+  //   type: bundle.cleanedRequest.type,
+  //   data: bundle.cleanedRequest.data
+  // };
 
-  return [recipe];
+  return [{ hello: 'hi' }];
 };
 
 const getFallbackRealRecipe = (z, bundle) => {
@@ -85,7 +89,11 @@ module.exports = {
     // `inputFields` can define the fields a user could provide,
     // we'll pass them in as `bundle.inputData` later.
     inputFields: [
-      {key: 'triggerKey', type: 'string', helpText: 'This is the key provided to the Zapier service by your MESG Application. Use this to specify which Zapier workflow to launch'}
+      { 
+        key: 'triggerKey', 
+        type: 'string',
+        required: true,
+        helpText: 'This is the unique key that is specified from you MESG Application to your MESG Zapier Service. This will enable you to have multiple Zaps inside of your MESG Applications.' }
     ],
 
     type: 'hook',
