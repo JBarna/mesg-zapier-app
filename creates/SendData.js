@@ -3,9 +3,12 @@ const sample = require('../samples/sample_issue');
 const sendData = (z, bundle) => {
   const responsePromise = z.request({
     method: 'POST',
-    url: `${bundle.inputData.endpoint}/api/data`,
+    url: `${bundle.authData.endpoint}/api/data`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
-      data: bundle.inputData.body,
+      data: bundle.inputData.data,
       id: bundle.inputData['trigger-id'],
     })
   });

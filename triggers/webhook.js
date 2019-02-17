@@ -1,3 +1,8 @@
+const sampleData = {
+  type: 'sample-type',
+  data: "The data available will largely depend on what you provide to the MESG Service!"
+}
+
 const subscribeHook = (z, bundle) => {
   // `z.console.log()` is similar to `console.log()`.
   z.console.log('console says hello world!');
@@ -51,23 +56,21 @@ const getRecipe = (z, bundle) => {
   //   data: bundle.cleanedRequest.data
   // };
 
-  return [{ hello: 'hi' }];
+  return [bundle.cleanedRequest];
 };
 
 const getFallbackRealRecipe = (z, bundle) => {
   // For the test poll, you should get some real data, to aid the setup process.
   const options = {
-    url: 'http://57b20fb546b57d1100a3c405.mockapi.io/api/recipes/',
-    params: {
-      style: bundle.inputData.style
-    }
+    method: 'GET',
+    url: `${bundle.authData.endpoint}/api/samples/${bundle.inputData.triggerKey}`,
   };
 
-
-  return getRecipe(z, bundle)
+  //return getRecipe(z, bundle)
 
   return z.request(options)
     .then((response) => JSON.parse(response.content));
+  //return [sampleData, sampleData, sampleData]
 };
 
 // We recommend writing your triggers separate like this and rolling them
@@ -106,10 +109,7 @@ module.exports = {
     // In cases where Zapier needs to show an example record to the user, but we are unable to get a live example
     // from the API, Zapier will fallback to this hard-coded sample. It should reflect the data structure of
     // returned records, and have obviously dummy values that we can show to any user.
-    sample: {
-      type: 'sample-type',
-      data: "The data available will largely depend on what you provide to the MESG Service!"
-    },
+    sample: sampleData,
 
     // If the resource can have fields that are custom on a per-user basis, define a function to fetch the custom
     // field definitions. The result will be used to augment the sample.
